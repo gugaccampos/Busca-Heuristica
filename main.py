@@ -45,7 +45,7 @@ class general_frontiers:
         if color != actual_line_color and color != None:
             actual_line_color = color
 
-        nei = neighbours_general.get_inline_order_neighbours(start, destination)  # all neighbours
+        nei = neighbours_general.get_inline_order_neighbours(start, destination, lines, actual_line_color, first_time)  # all neighbours
 
         order_nei = [i[0] for i in nei]  # the nest process is to have only the eligible neighbours:
         for i in nei:
@@ -54,10 +54,11 @@ class general_frontiers:
                     is_ch_lines = 0
                 else:
                     is_ch_lines = 4
-            new_value = lines_and_distances.get_real_distance(start, i[0]) * 2 + is_ch_lines + stations_dic[start]
+            new_value = lines_and_distances.get_real_distance(start, i[0]) * 2 + is_ch_lines + stations_dic_real_distance[start]
             # which neighbours are an option comming from 'start'?
-            if new_value < stations_dic[i[0]]:
-                stations_dic[i[0]] = new_value
+            if new_value < stations_dic_real_distance[i[0]]:
+                stations_dic_real_distance[i[0]] = new_value
+                stations_dic_line_distance[i[0]] = i[1]
                 stations_dic_visted[i[0]] = True
                 stations_dic_dir[i[0]] = start
             else:
@@ -67,7 +68,7 @@ class general_frontiers:
         first_time = False
 
         st = {key: value for key, value in stations_dic_visted.items() if value == True}  # places i've not visited yet
-        st2 = [(i, stations_dic[i]) for i in st]  # those places cost
+        st2 = [(i, stations_dic_line_distance[i]) for i in st]  # those places cost
         min_value = (sorted(st2, key=lambda x: x[1]))[0]  # the min cost
 
         print(f'Estamos em {start}')
@@ -77,10 +78,16 @@ class general_frontiers:
         general_frontiers.frontier(min_value[0], destination)  # go to that min cost place
 
 def call_function(start, destination):
-    global stations_dic
-    stations_dic = {"E1": 99999, "E2": 99999, "E3": 99999, "E4": 99999, "E5": 99999, "E6": 99999, "E7": 99999,
+    global stations_dic_real_distance
+    stations_dic_real_distance = {"E1": 99999, "E2": 99999, "E3": 99999, "E4": 99999, "E5": 99999, "E6": 99999, "E7": 99999,
                     "E8": 99999, "E9": 99999,
                     "E10": 99999, "E11": 99999, "E12": 99999, "E13": 99999, "E14": 99999}
+
+    global stations_dic_line_distance
+    stations_dic_line_distance = {"E1": 99999, "E2": 99999, "E3": 99999, "E4": 99999, "E5": 99999, "E6": 99999,
+                                  "E7": 99999,
+                                  "E8": 99999, "E9": 99999,
+                                  "E10": 99999, "E11": 99999, "E12": 99999, "E13": 99999, "E14": 99999}
 
     global stations_dic_dir
     stations_dic_dir = {"E1": "", "E2": "", "E3": "", "E4": "", "E5": "", "E6": "", "E7": "", "E8": "", "E9": "",
@@ -96,13 +103,14 @@ def call_function(start, destination):
 
     print('\n'"===========================================================")
     print(f"teste do {start} até o {destination}")
-    stations_dic[start] = 0
+    stations_dic_real_distance[start] = 0
+    stations_dic_line_distance[start] = 0
     stations_dic_visted[start] = True
 
     general_frontiers.frontier(start, destination)
 
     print(f'Chegamos em {destination}')
-    print(f"custo: {stations_dic[destination]:.1f}")
+    print(f"custo: {stations_dic_real_distance[destination]:.1f}")
     print("rota final:")
     way = destination  # do you know the way
     while way != start:

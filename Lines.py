@@ -63,5 +63,4 @@ class lines_and_distances:
                 value = 0
         except:
             value = -1
-        print(value)
         return value
