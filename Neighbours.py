@@ -2,6 +2,7 @@ from Lines import lines_and_distances
 
 class neighbours_general:
 
+    # Esta função pega os vizinhos da estação atual
     def get_neighbours(station) -> list:
         """get all neighbours from a station"""
         neighbours = []
@@ -12,10 +13,13 @@ class neighbours_general:
         return neighbours
 
 
+    # Esta função retorna os vizinhos da estação atual e a distância heurística deles
     def get_inline_order_neighbours(actual_station, final_station, lines, actual_line_color, first_time) -> list:
-        """calculate the cost function for all neighbours and return then in order"""
+
+        # Chamando a função para retornar os vizinhos
         neighbours = neighbours_general.get_neighbours(actual_station)
 
+        # Calcula a distância heurística dos vizinhos
         neighbours_inline_dist = [round((lines_and_distances.get_inline_distance(dist, final_station) * 2) +
                                   (lines_and_distances.get_real_distance(actual_station, dist) * 2) +
                                   (0 if not first_time and actual_station in lines[actual_line_color] else 4), 1)

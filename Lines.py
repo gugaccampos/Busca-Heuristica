@@ -1,5 +1,5 @@
 
-inline_distance = [  # the table 1
+inline_distance = [  # Tabela 1 - Distância em linha reta
     [10, 18.5, 24.8, 36.4, 38.8, 35.8, 25.4, 17.6, 9.1, 16.7, 27.3, 27.6, 29.8],
     [8.5, 14.8, 26.6, 29.1, 26.1, 17.3, 10, 3.5, 15.5, 20.9, 19.1, 21.8],
     [6.3, 18.2, 20.6, 17.6, 13.6, 9.4, 10.3, 19.5, 19.1, 12.1, 16.6],
@@ -15,7 +15,7 @@ inline_distance = [  # the table 1
     [5.1]
 ]
 
-real_distances = {  # table 2
+real_distances = {  # Tabela 2 -  Distância real
     "E1:E2": 10,
     "E2:E3": 8.5,
     "E2:E9": 10,
@@ -37,6 +37,7 @@ real_distances = {  # table 2
 
 class lines_and_distances:
 
+    # Função que pega a distância real entre duas estações.
     def get_real_distance(station_a, station_b) -> float:
         """to get the real distance in km from one station to the other"""
         num1 = int(station_a[1:]) - 1
@@ -48,7 +49,7 @@ class lines_and_distances:
             value = -1
         return value
 
-
+    # Função que pega a distância em linha entre a fronteira e a estação final.
     def get_inline_distance(station_a, station_b) -> float:
         """inline distance"""
         num1 = int(station_a[1:]) - 1
