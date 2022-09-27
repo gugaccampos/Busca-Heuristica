@@ -45,16 +45,16 @@ class general_frontiers:
         if color != actual_line_color and color != None:
             actual_line_color = color
 
-        nei = neighbours_general.get_inline_order_neighbours(start, destination, lines, actual_line_color, first_time)  # all neighbours
+        neighbours = neighbours_general.get_inline_order_neighbours(start, destination, lines, actual_line_color, first_time)  # all neighbours
 
-        order_nei = [i[0] for i in nei]  # the nest process is to have only the eligible neighbours:
-        for i in nei:
+        order_neighbours = [i[0] for i in neighbours]  # the nest process is to have only the eligible neighbours:
+        for i in neighbours:
             if not first_time:
                 if i[0] in lines[actual_line_color]:
                     is_ch_lines = 0
                 else:
                     is_ch_lines = 4
-            new_value = lines_and_distances.get_real_distance(start, i[0]) * 2 + is_ch_lines + stations_dic_real_distance[start]
+            new_value = round((lines_and_distances.get_real_distance(start, i[0]) * 2 + is_ch_lines + stations_dic_real_distance[start]), 1)
             # which neighbours are an option comming from 'start'?
             if new_value < stations_dic_real_distance[i[0]]:
                 stations_dic_real_distance[i[0]] = new_value
@@ -62,18 +62,21 @@ class general_frontiers:
                 stations_dic_visted[i[0]] = True
                 stations_dic_dir[i[0]] = start
             else:
-                order_nei.remove(i[0])
+                order_neighbours.remove(i[0])
 
         stations_dic_visted[start] = False
         first_time = False
 
-        st = {key: value for key, value in stations_dic_visted.items() if value == True}  # places i've not visited yet
-        st2 = [(i, stations_dic_line_distance[i]) for i in st]  # those places cost
-        min_value = (sorted(st2, key=lambda x: x[1]))[0]  # the min cost
+        stations = {key: value for key, value in stations_dic_visted.items() if value == True}  # places i've not visited yet
+        station_heuristic = [(i, stations_dic_line_distance[i]) for i in stations]  # those places cost
+        station_real = [(i, stations_dic_real_distance[i]) for i in stations]
+        min_value = (sorted(station_heuristic, key=lambda x: x[1]))[0]  # the min cost
 
         print(f'Estamos em {start}')
-        print("fronteira atual:")
-        print(st2, '\n')
+        print("Distâncias fronteira real:")
+        print(station_real)
+        print('Distâncias fronteira eurística:')
+        print(station_heuristic, '\n')
 
         general_frontiers.frontier(min_value[0], destination)  # go to that min cost place
 
@@ -110,7 +113,7 @@ def call_function(start, destination):
     general_frontiers.frontier(start, destination)
 
     print(f'Chegamos em {destination}')
-    print(f"custo: {stations_dic_real_distance[destination]:.1f}")
+    print(f"custo: {stations_dic_real_distance[destination]}")
     print("rota final:")
     way = destination  # do you know the way
     while way != start:
@@ -126,4 +129,3 @@ cord1 = input()
 cord2 = input()
 
 call_function(cord1, cord2)
-

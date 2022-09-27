@@ -16,9 +16,9 @@ class neighbours_general:
         """calculate the cost function for all neighbours and return then in order"""
         neighbours = neighbours_general.get_neighbours(actual_station)
 
-        neighbours_inline_dist = [(lines_and_distances.get_inline_distance(dist, final_station) * 2) +
+        neighbours_inline_dist = [round((lines_and_distances.get_inline_distance(dist, final_station) * 2) +
                                   (lines_and_distances.get_real_distance(actual_station, dist) * 2) +
-                                  (0 if not first_time and actual_station in lines[actual_line_color] else 4)
+                                  (0 if not first_time and actual_station in lines[actual_line_color] else 4), 1)
                                   for dist in neighbours]  # multiplier 2 is km/h -> min
         neighbours_zip = zip(neighbours, neighbours_inline_dist)
         neighbours_zip = sorted(neighbours_zip, key=lambda x: x[1])

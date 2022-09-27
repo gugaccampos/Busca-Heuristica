@@ -42,8 +42,8 @@ class lines_and_distances:
         num1 = int(station_a[1:]) - 1
         num2 = int(station_b[1:]) - 1
         try:
-            value = real_distances[str(station_a + ":" + station_b)] if num1 < num2 else real_distances[
-                str(station_b + ":" + station_a)]
+            value = round(real_distances[str(station_a + ":" + station_b)], 1) if num1 < num2 else\
+            round(real_distances[str(station_b + ":" + station_a)], 1)
         except:
             value = -1
         return value
@@ -56,9 +56,9 @@ class lines_and_distances:
         value = -1
         try:
             if num1 < num2:
-                value = inline_distance[num1][num2 - num1 - 1]
+                value = round(inline_distance[num1][num2 - num1 - 1], 1)
             elif num1 > num2:
-                value = inline_distance[num2][num1 - num2 - 1]
+                value = round(inline_distance[num2][num1 - num2 - 1], 1)
             else:
                 value = 0
         except:
