@@ -43,6 +43,7 @@ class lines_and_distances:
         num1 = int(station_a[1:]) - 1
         num2 = int(station_b[1:]) - 1
         try:
+            #se num1 < num2 pega a distância de a -> b, se não, pega de b -> a
             value = round(real_distances[str(station_a + ":" + station_b)], 1) if num1 < num2 else\
             round(real_distances[str(station_b + ":" + station_a)], 1)
         except:
